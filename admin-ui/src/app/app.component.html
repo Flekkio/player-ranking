@@ -1,0 +1,56 @@
+<div class="table-wrapper">
+  <h1>Classement des joueurs 🏆</h1>
+
+  <form (ngSubmit)="addPlayer()" style="margin-bottom: 20px;">
+    <input [(ngModel)]="newPseudo" name="pseudo" placeholder="Pseudo" required />
+    <input [(ngModel)]="newPoints" name="points" type="number" placeholder="Points" required min="0" />
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <table>
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Pseudo</th>
+      <th>Points</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let player of players; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ player.pseudo }}</td>
+      <td>
+        <ng-container *ngIf="editingId === player.id; else staticPoints">
+          <input type="number" [(ngModel)]="editedPoints" style="width: 60px;" />
+          <button (click)="updatePoints()">✔</button>
+          <button (click)="cancelEdit()">✖</button>
+        </ng-container>
+        <ng-template #staticPoints>
+          {{ player.points }}
+          <button (click)="startEdit(player)">✏️</button>
+        </ng-template>
+      </td>
+      <td>
+        <button
+          type="button"
+          (click)="deletePlayer(player.id)"
+          style="color: red; border: none; background: none; cursor: pointer;"
+        >
+          Suppr
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 20px">
+    <button
+      type="button"
+      (click)="endTournament()"
+      style="background-color: crimson; color: white; padding: 8px 12px; border: none; cursor: pointer;"
+    >
+      Fin du tournoi
+    </button>
+  </div>
+</div>
